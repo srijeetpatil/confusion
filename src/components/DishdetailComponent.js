@@ -1,13 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardText, CardBody,
     CardTitle } from 'reactstrap';
-import Menu from './MenuComponent';
+import Main from './MainComponent';
 
-class DishDetail extends Component{
-	constructor(props){
-		super(props);
-	}
-	renderDish(cmnts){
+function renderComments(cmnts){
 		if(cmnts == null){
 			return(
 				<div></div>
@@ -19,27 +15,28 @@ class DishDetail extends Component{
 				);
 		}
 	}
-	render(){
-			const cmnts = this.props.dish.comments.map((comment) => {
+
+	function Dishdetails(props){
+			const cmnts = props.dish.comments.map((comment) => {
 					return(
 						<div className="row">
-							<div className="mt-1">
-								<p>{comment.comment}</p>
-							</div>
-							<div className="mt-1">
-								<p>-- {comment.author} , {comment.date}, </p>
-							</div>
+						<div className="mt-1">
+							<p>{comment.comment}</p>
 						</div>
+						<div className="mt-1">
+							<p>-- {comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}, </p>
+						</div>	
+					</div>	
 						);
 					});
 			return(
 			<div className="row">
 				<div className="col-12 col-md-5 m-1">
 					<Card>
-	                    <CardImg top src={this.props.dish.image} alt={this.props.dish.name} />
+	                    <CardImg top src={props.dish.image} alt={props.dish.name} />
 	                    <CardBody>
-	                      <CardTitle>{this.props.dish.name}</CardTitle>
-	                      <CardText>{this.props.dish.description}</CardText>
+	                      <CardTitle>{props.dish.name}</CardTitle>
+	                      <CardText>{props.dish.description}</CardText>
 	                    </CardBody>
 	                </Card>
 				</div>				
@@ -48,11 +45,10 @@ class DishDetail extends Component{
 	                	<h4><strong>Comments</strong></h4>
 	                </div>
 	                <div>
-	                	{this.renderDish(cmnts)}
+	                	{renderComments(cmnts)}
 	                </div>                                               
                 </div>             
 			</div>
 			);
 		}
-}
-export default DishDetail;
+export default Dishdetails;
