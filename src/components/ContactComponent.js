@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem,
     Button, Row, Col, Label } from 'reactstrap';
 import { Control, Form, Errors, actions } from 'react-redux-form';
+import { baseUrl } from '../shared/baseUrl';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -17,7 +18,22 @@ class Contact extends Component{
     }
     
     handleSubmit(values){
-        alert('Current State is: ' + JSON.stringify(values));  
+        this.props.postFeedback(values.firstname, values.lastname, values.telnum, values.email, values.agree, values.contactType, values.message);
+        var fb = fetch(baseUrl + 'feedback')
+        .then(response => response.json())
+        .then(feedback => {
+            var max = 0;
+            var object;
+            feedback.filter((obj) => {                
+                if(obj.id > max){
+                    max = obj.id;
+                    object = obj;
+                }
+            });
+            alert("Thanks for your feedback, your feedback has been recorded " + 
+            values.firstname + " " + values.lastname + " " + 
+            values.telnum + " " + values.email + " " + values.agree + " " + values.contactType + " " + values.message + " " + max);
+        })        
         this.props.resetFeedbackForm();
     }              
     render(){        
